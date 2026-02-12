@@ -3,20 +3,23 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.function.Supplier;
 
 @Configurable
 @TeleOp
-public class Teleop extends OpMode {
+public class TeleopBLUE extends OpMode {
     private Follower follower;
+
+    private AprilTagWebcam  aprilTagWebcam = new AprilTagWebcam();
+    private TurretMechanism turret = new TurretMechanism();
+
     public static Pose startingPose;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
@@ -30,6 +33,9 @@ public class Teleop extends OpMode {
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
+        aprilTagWebcam.init(hardwareMap,telemetry);
+        turret.init(hardwareMap);
+        telemetry.addLine("All INITED");
 
 //        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
 //                .addPath(new Path(new BezierLine(follower::getPose, new Pose(45, 98))))
@@ -40,6 +46,7 @@ public class Teleop extends OpMode {
     @Override
     public void start() {
         follower.startTeleopDrive();
+        turret.restartTimer();
     }
 
     @Override
@@ -47,6 +54,17 @@ public class Teleop extends OpMode {
         //Call this once per loop
         follower.update();
         telemetryM.update();
+        //webcam starting phase
+        aprilTagWebcam.update();
+        AprilTagDetection id20 = aprilTagWebcam.getTageBySpecificId(20);
+        //starting turret
+        turret.update(id20);
+        //telemetery feedback
+        if(id20 != null){
+            telemetry.addData("Cur Id", aprilTagWebcam);
+        }else{
+            telemetry.addLine("NO TAG DETECTED");
+        }
 
         if (!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
