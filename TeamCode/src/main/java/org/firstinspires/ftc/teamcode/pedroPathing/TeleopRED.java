@@ -9,7 +9,6 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -18,7 +17,7 @@ import java.util.function.Supplier;
 
 @Configurable
 @TeleOp
-public class TeleopBLUE extends OpMode {
+public class TeleopRED extends OpMode {
     private Follower follower;
 
     private AprilTagWebcam  aprilTagWebcam = new AprilTagWebcam();
@@ -91,7 +90,7 @@ public class TeleopBLUE extends OpMode {
         telemetryM.update();
         //webcam starting phase
         aprilTagWebcam.update();
-        AprilTagDetection id20 = aprilTagWebcam.getTageBySpecificId(20);
+        AprilTagDetection id20 = aprilTagWebcam.getTageBySpecificId(24);
         //starting turret
         turret.update(id20);
         //telemetery feedback
