@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(16.2)
+            .mass(10)
             .forwardZeroPowerAcceleration(-25.9346931313679598)
             .lateralZeroPowerAcceleration(-67.342491844080064)
             .useSecondaryTranslationalPIDF(true)
@@ -83,14 +83,14 @@ public class Constants {
             .leftPodY(1)
             .rightPodY(-1)
             .strafePodX(-2.5)
-            .leftEncoder_HardwareMapName("leftFront")
-            .rightEncoder_HardwareMapName("rightRear")
-            .strafeEncoder_HardwareMapName("rightFront")
+            .leftEncoder_HardwareMapName("motor_lf")
+            .rightEncoder_HardwareMapName("motor_rf")
+            .strafeEncoder_HardwareMapName("motor_rb")
             .leftEncoderDirection(Encoder.FORWARD)
             .rightEncoderDirection(Encoder.FORWARD)
             .strafeEncoderDirection(Encoder.FORWARD)
             .IMU_HardwareMapName("imu")
-            .IMU_Orientation(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
+            .IMU_Orientation(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP));
     public static PathConstraints pathConstraints = new PathConstraints(
             0.995,
             0.1,
